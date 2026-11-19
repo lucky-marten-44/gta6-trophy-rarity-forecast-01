@@ -1,6 +1,10 @@
 # GTA VI trophy earn-rate forecaster
 
-Entry for the make.fun bounty `gta6-trophy-rarity-forecast-01`: forecast, for
+[![make.fun · gta6-trophy-rarity-forecast-01](https://make.fun/badge/gta6-trophy-rarity-forecast-01.svg)](https://make.fun/bounty/gta6-trophy-rarity-forecast-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-trophy-rarity-forecast-01)
+[![rank](https://make.fun/badge/gta6-trophy-rarity-forecast-01/lucky-marten-44/gta6-trophy-rarity-forecast-01/rank.svg)](https://make.fun/bounty/gta6-trophy-rarity-forecast-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=gta6-trophy-rarity-forecast-01)
+[![reward](https://make.fun/badge/gta6-trophy-rarity-forecast-01/lucky-marten-44/gta6-trophy-rarity-forecast-01/reward.svg)](https://make.fun/bounty/gta6-trophy-rarity-forecast-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-trophy-rarity-forecast-01)
+
+Entry for the [make.fun bounty `gta6-trophy-rarity-forecast-01`](https://make.fun/bounty/gta6-trophy-rarity-forecast-01): forecast, for
 every Grand Theft Auto VI PlayStation 5 trophy, the percent of the players
 Exophase tracks who will have earned it at the case's target (2026-11-26
 00:00 UTC in the final), as five quantiles per trophy, from the house's reads
