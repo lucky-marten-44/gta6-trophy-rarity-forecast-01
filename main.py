@@ -58,8 +58,10 @@ Spread (logit units): sigma = sqrt(resid_var + (slope_se * dx)^2
 the residual variance of Model A's fit (floored at 0.02, so a perfectly
 flat history -- as on launch night, before the first refresh -- does not
 claim zero uncertainty), slope_se * dx is the standard error of the
-extrapolation to the target, and refresh_var = 0.25^2 covers the next
-Exophase refresh moving rates in a jump. Quantiles are the median shifted
+extrapolation to the target, and refresh_var covers the next
+Exophase refresh moving rates in a jump: 0.25^2 routinely, 0.55^2 when
+the page has sat unchanged for the whole window (stale), calibrated to
+the launch-night jump from 638 to 3,868 tracked players. Quantiles are the median shifted
 by the standard normal's quantiles at the contest's five levels.
 
 Fallbacks keep every case valid: a trophy with no usable reads forecasts
@@ -91,6 +93,19 @@ SHRINK_N = 6.0
 MAX_SLOPE = 4.0
 RESID_VAR_FLOOR = 0.02
 REFRESH_SD = 0.25
+# Refresh jump on a stale page: when every read in the window shows the
+# page exactly as it was (same rates and same players tracked), Exophase
+# has not refreshed at all in the window, so the next refresh is a jump,
+# not a routine update. The one jump this launch shows -- 638 players
+# tracked for hours, then 3,868 at 04:30 UTC with almost every rate lower
+# -- moves a small rate by up to ln(3868/638) = 1.80 logit if no new
+# player earned it, and by about half that, 0.90 logit, if earners grew
+# at half the tracked set's log rate. STALE_REFRESH_SD = 0.55 puts that
+# central 0.90-logit dilution move at the 5% quantile (0.90 / 1.645), so
+# a stale page carries honest spread for the refresh. It applies only
+# while the page is provably stale; trending histories, where the page
+# visibly refreshes, keep the routine 0.25.
+STALE_REFRESH_SD = 0.55
 SIGMA_FLOOR = 0.30
 SIGMA_CAP = 1.50
 
@@ -178,6 +193,14 @@ def forecast_case(case):
               if (slots[-1] - s).total_seconds() <= WINDOW_HOURS * 3600]
     if len(window) < 3:
         window = reads
+
+    # Stale page: every read in the window identical to the last one --
+    # same rates and same players tracked -- so Exophase has not
+    # refreshed at all in the window, and the next refresh is a jump.
+    stale = (len(window) >= 2 and all(
+        r["rates"] == reads[-1]["rates"] and r["n"] == reads[-1]["n"]
+        for r in window))
+    refresh_sd = STALE_REFRESH_SD if stale else REFRESH_SD
 
     # Players-tracked trend over the whole history (Model B's denominator).
     n_fit = None
@@ -276,7 +299,7 @@ def forecast_case(case):
         med_logit = min(med_logit, logit(ceiling))
         med_logit = max(logit(0.01), min(logit(99.99), med_logit))
 
-        var = resid_var + (slope_se * dx) ** 2 + REFRESH_SD ** 2
+        var = resid_var + (slope_se * dx) ** 2 + refresh_sd ** 2
         sigma = math.sqrt(var)
         sigma = max(SIGMA_FLOOR, min(SIGMA_CAP, sigma))
         rows.append({"id": trophy["id"], "q": quantiles(med_logit, sigma)})

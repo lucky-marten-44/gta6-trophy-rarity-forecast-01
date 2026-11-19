@@ -48,7 +48,7 @@ contest's five levels, rounded to 4 decimals.
 
 - Practice cases `p00`/`p01` (flat launch-night history, 90-minute horizon):
   valid output, 55 trophies each, medians equal to the last read rates with
-  a 0.29-logit spread — wider than the house persistence baseline's 0.125,
+  a 0.57-logit spread on stale (flat) pages — wider than the house persistence baseline's 0.125,
   which matters because both practice answers are the post-refresh page.
 - A synthetic final-like case (120 reads over 2.6 days, tracked players
   638 → ~40k, chapter-1 rate 1.25% → 55% by the deadline, 4.5-day horizon):
